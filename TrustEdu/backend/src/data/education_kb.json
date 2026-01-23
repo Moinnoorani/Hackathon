@@ -1,0 +1,93 @@
+[
+    {
+        "topic": "Machine Learning",
+        "keywords": [
+            "machine learning",
+            "ml",
+            "training",
+            "model"
+        ],
+        "content": "Machine Learning is a subset of AI where computers learn from data without explicit programming. It uses algorithms to parse data, learn from it, and make determinations or predictions."
+    },
+    {
+        "topic": "Blockchain",
+        "keywords": [
+            "blockchain",
+            "ledger",
+            "decentralized",
+            "crypto"
+        ],
+        "content": "Blockchain is a shared, immutable ledger that facilitates the process of recording transactions and tracking assets in a business network. TrustEdu uses it for immutable academic records."
+    },
+    {
+        "topic": "Chemistry - Atoms",
+        "keywords": [
+            "chemistry",
+            "atom",
+            "proton",
+            "electron",
+            "neutron"
+        ],
+        "content": "Atoms are the basic units of matter and the defining structure of elements. They are made up of three particles: protons, neutrons, and electrons."
+    },
+    {
+        "topic": "Physics - Newton's Laws",
+        "keywords": [
+            "physics",
+            "newton",
+            "motion",
+            "force"
+        ],
+        "content": "Newton's First Law states that an object will remain at rest or in uniform motion in a straight line unless acted upon by an external force."
+    },
+    {
+        "topic": "Biology - Photosynthesis",
+        "keywords": [
+            "biology",
+            "photosynthesis",
+            "plant",
+            "energy"
+        ],
+        "content": "Photosynthesis is the process by which green plants and some other organisms use sunlight to synthesize foods from carbon dioxide and water."
+    },
+    {
+        "topic": "Mathematics - Calculus",
+        "keywords": [
+            "math",
+            "calculus",
+            "derivative",
+            "integral"
+        ],
+        "content": "Calculus is the mathematical study of continuous change. It has two major branches: differential calculus (rates of change) and integral calculus (accumulation of quantities)."
+    },
+    {
+        "topic": "History - World War II",
+        "keywords": [
+            "history",
+            "war",
+            "ww2",
+            "1945"
+        ],
+        "content": "World War II was a global war that lasted from 1939 to 1945. It involved the vast majority of the world's countries, forming two opposing military alliances: the Allies and the Axis."
+    },
+    {
+        "topic": "Computer Science - Python",
+        "keywords": [
+            "python",
+            "coding",
+            "programming",
+            "language"
+        ],
+        "content": "Python is a high-level, general-purpose programming language. Its design philosophy emphasizes code readability with the use of significant indentation."
+    },
+    {
+        "topic": "Study Skills",
+        "keywords": [
+            "study",
+            "focus",
+            "memory",
+            "exam"
+        ],
+        "content": "Effective study techniques include Spaced Repetition (reviewing material at increasing intervals), Active Recall (testing yourself), and the Pomodoro Technique (25 minutes work, 5 minutes break)."
+    }
+]
