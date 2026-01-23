@@ -1,4 +1,6 @@
 const axios = require("axios");
+const Prediction = require("../models/Prediction");
+const Student = require("../models/Student");
 
 exports.createPrediction = async (req, res) => {
   try {
@@ -28,26 +30,6 @@ exports.createPrediction = async (req, res) => {
     const predictionResult = mlResponse.data;
     console.log("✅ ML prediction received:", predictionResult);
 
-    // Create student and prediction objects (in-memory, no DB)
-    const student = {
-      studentId,
-      semester,
-      marks,
-      attendance,
-      quizScore,
-      assignmentScore,
-      createdAt: new Date()
-    };
-
-    const prediction = {
-      studentId,
-      semester,
-      predictedGrade: predictionResult.predictedGrade,
-      riskLevel: predictionResult.riskLevel,
-      confidence: predictionResult.confidence,
-      createdAt: new Date()
-    };
-
     // Create blockchain record (mock for demo without actual blockchain)
     const recordId = `${studentId}_SEM${semester}_${Date.now()}`;
     const blockchain = {
@@ -59,12 +41,66 @@ exports.createPrediction = async (req, res) => {
 
     console.log("🔗 Blockchain record created (mock):", blockchain.recordId);
 
-    // Send response to frontend
-    res.json({
-      student,
-      prediction,
-      blockchain
-    });
+    // Save to Database (Graceful Fallback)
+    try {
+      // 1. Save specific Prediction Event
+      const newPrediction = new Prediction({
+        studentId,
+        semester,
+        marks,
+        attendance,
+        quizScore,
+        assignmentScore,
+        predictedGrade: predictionResult.predictedGrade,
+        riskLevel: predictionResult.riskLevel,
+        confidence: predictionResult.confidence,
+        blockchain
+      });
+      await newPrediction.save();
+      console.log("💾 Prediction saved to MongoDB");
+
+      // 2. Update/Upsert Student Record (Keep latest stats)
+      await Student.findOneAndUpdate(
+        { studentId: studentId }, // Find by ID
+        {
+          // Update with latest data
+          semester,
+          marks,
+          attendance,
+          quizScore,
+          assignmentScore
+        },
+        { upsert: true, new: true, setDefaultsOnInsert: true } // Create if not exists
+      );
+      console.log("👤 Student profile updated/created");
+
+      // Send response to frontend (Success with DB)
+      res.json({
+        student: newPrediction,
+        prediction: {
+          predictedGrade: newPrediction.predictedGrade,
+          riskLevel: newPrediction.riskLevel,
+          confidence: newPrediction.confidence
+        },
+        blockchain
+      });
+
+    } catch (dbError) {
+      console.warn("⚠️ Database save failed (running offline):", dbError.message);
+
+      // Fallback response (Success without DB)
+      res.json({
+        student: { // Mock student object for frontend compatibility
+          studentId, semester, marks, attendance, quizScore, assignmentScore
+        },
+        prediction: {
+          predictedGrade: predictionResult.predictedGrade,
+          riskLevel: predictionResult.riskLevel,
+          confidence: predictionResult.confidence
+        },
+        blockchain
+      });
+    }
 
   } catch (err) {
     console.error("❌ Prediction error:", err.message);
