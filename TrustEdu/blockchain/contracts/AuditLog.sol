@@ -30,3 +30,4 @@ contract AuditLog {
         return (r.dataHash, r.timestamp);
     }
 }
+    

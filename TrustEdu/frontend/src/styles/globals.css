@@ -15,29 +15,29 @@
   --color-foreground: #FFFFFF;
   --color-muted: #94A3B8;
   --color-border: #1E293B;
-  
+
   /* Bitcoin Orange */
   --color-primary: #F7931A;
   --color-primary-dark: #EA580C;
   --color-primary-light: #FFD600;
-  
+
   /* Semantic */
   --color-success: #10b981;
   --color-warning: #f59e0b;
   --color-danger: #ef4444;
   --color-blockchain: #3b82f6;
   --color-ai: #8b5cf6;
-  
+
   /* Gradients */
   --gradient-primary: linear-gradient(to right, #EA580C, #F7931A);
   --gradient-gold: linear-gradient(to right, #F7931A, #FFD600);
-  
+
   /* Shadows */
   --shadow-orange-glow: 0 0 20px -5px rgba(234, 88, 12, 0.5);
   --shadow-orange-glow-lg: 0 0 30px -5px rgba(247, 147, 26, 0.6);
   --shadow-gold-glow: 0 0 20px rgba(255, 214, 0, 0.3);
   --shadow-card-elevation: 0 0 50px -10px rgba(247, 147, 26, 0.1);
-  
+
   /* Fonts */
   --font-heading: 'Space Grotesk', sans-serif;
   --font-body: 'Inter', sans-serif;
@@ -72,7 +72,12 @@ body {
   font-family: var(--font-mono);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   font-weight: 600;
   line-height: 1.2;
@@ -127,18 +132,24 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Animations */
 @keyframes float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateY(0px);
   }
+
   50% {
     transform: translateY(-20px);
   }
 }
 
 @keyframes pulse-glow {
-  0%, 100% {
+
+  0%,
+  100% {
     box-shadow: 0 0 20px -5px rgba(234, 88, 12, 0.3);
   }
+
   50% {
     box-shadow: 0 0 30px -5px rgba(247, 147, 26, 0.6);
   }
@@ -148,6 +159,7 @@ h1, h2, h3, h4, h5, h6 {
   0% {
     background-position: -1000px 0;
   }
+
   100% {
     background-position: 1000px 0;
   }
@@ -163,12 +175,10 @@ h1, h2, h3, h4, h5, h6 {
 
 .animate-shimmer {
   animation: shimmer 3s linear infinite;
-  background: linear-gradient(
-    to right,
-    transparent 0%,
-    rgba(247, 147, 26, 0.1) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(to right,
+      transparent 0%,
+      rgba(247, 147, 26, 0.1) 50%,
+      transparent 100%);
   background-size: 1000px 100%;
 }
 
@@ -270,6 +280,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

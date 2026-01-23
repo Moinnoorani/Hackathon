@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Input, Button, Badge } from '../components/ui';
 import { Bot, Send, Clock, Shield, Sparkles } from 'lucide-react';
 import { chatWithTutor } from '../services/api';
+import authService from '../services/authService';
+import AuditTrail from '../components/AuditTrail';
 import './TutorChat.css';
 
 const TutorChat = () => {
@@ -10,6 +12,13 @@ const TutorChat = () => {
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const user = authService.getCurrentUser();
+    if (user && user.user) {
+      setStudentId(user.user.username);
+    }
+  }, []);
 
   const quickQuestions = [
     "How can I improve my grades?",
@@ -22,7 +31,7 @@ const TutorChat = () => {
     const queryText = customQuestion || question;
 
     if (!studentId || !queryText) {
-      setError('Please enter both Student ID and a question');
+      setError('Please enter a question');
       return;
     }
 
@@ -102,15 +111,15 @@ const TutorChat = () => {
               <Card>
                 <Card.Header>
                   <Card.Title>Student Info</Card.Title>
-                  <Card.Description>Enter your ID to start chatting</Card.Description>
+                  <Card.Description>Logged in as:</Card.Description>
                 </Card.Header>
                 <Card.Content>
                   <Input
                     label="Student ID"
-                    placeholder="e.g., STU-2024-001"
                     value={studentId}
-                    onChange={(e) => setStudentId(e.target.value)}
-                    required
+                    readOnly
+                    disabled
+                    className="opacity-75"
                   />
 
                   <div className="quick-questions">

@@ -1,6 +1,7 @@
 const axios = require("axios");
 const Prediction = require("../models/Prediction");
 const Student = require("../models/Student");
+const blockchainService = require("../services/blockchainService");
 
 exports.createPrediction = async (req, res) => {
   try {
@@ -17,6 +18,12 @@ exports.createPrediction = async (req, res) => {
       return res.status(400).json({ error: "Missing required fields" });
     }
 
+    // Range Validation
+    if (marks < 0 || marks > 100) return res.status(400).json({ error: "Marks must be between 0 and 100" });
+    if (attendance < 0 || attendance > 100) return res.status(400).json({ error: "Attendance must be between 0 and 100" });
+    if (quizScore < 0 || quizScore > 100) return res.status(400).json({ error: "Quiz Score must be between 0 and 100" });
+    if (assignmentScore < 0 || assignmentScore > 100) return res.status(400).json({ error: "Assignment Score must be between 0 and 100" });
+
     console.log("📊 Prediction request for student:", studentId);
 
     // Call Django ML API
@@ -30,16 +37,23 @@ exports.createPrediction = async (req, res) => {
     const predictionResult = mlResponse.data;
     console.log("✅ ML prediction received:", predictionResult);
 
-    // Create blockchain record (mock for demo without actual blockchain)
+    // Create Real Blockchain Record
     const recordId = `${studentId}_SEM${semester}_${Date.now()}`;
-    const blockchain = {
-      recordId,
-      txHash: `0x${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`,
-      blockNumber: Math.floor(Math.random() * 1000000),
-      timestamp: new Date()
-    };
+    let blockchain = {};
 
-    console.log("🔗 Blockchain record created (mock):", blockchain.recordId);
+    try {
+      const log = await blockchainService.storeHashOnBlockchain(recordId, studentId, predictionResult);
+      blockchain = {
+        recordId,
+        txHash: log.txHash,
+        blockNumber: log.blockNumber,
+        timestamp: log.createdAt
+      };
+      console.log("🔗 Real Blockchain TX Confirmed:", blockchain.txHash);
+    } catch (bcError) {
+      console.error("⚠️ Blockchain Transaction Failed:", bcError.message);
+      blockchain = { error: "Transaction failed", details: bcError.message };
+    }
 
     // Save to Database (Graceful Fallback)
     try {

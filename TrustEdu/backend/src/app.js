@@ -11,5 +11,7 @@ app.use(express.json());
 
 app.use("/api", predictionRoutes);
 app.use("/api", tutorRoutes);
+app.use("/api/auth", require("./routes/authRoutes"));
+app.use("/api/audit", require("./routes/auditRoutes"));
 
 module.exports = app;

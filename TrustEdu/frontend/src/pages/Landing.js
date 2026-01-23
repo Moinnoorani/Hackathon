@@ -6,6 +6,28 @@ import './Landing.css';
 
 const Landing = () => {
     const navigate = useNavigate();
+    const orbRef = React.useRef(null);
+
+    React.useEffect(() => {
+        const handleMouseMove = (e) => {
+            if (!orbRef.current) return;
+
+            const { clientX, clientY } = e;
+            const { innerWidth, innerHeight } = window;
+
+            // Calculate percentage from center (-1 to 1)
+            const x = (clientX - innerWidth / 2) / (innerWidth / 2);
+            const y = (clientY - innerHeight / 2) / (innerHeight / 2);
+
+            // Apply subtle rotation (max 15 degrees)
+            // RotateY corresponds to X movement (left/right tilt)
+            // RotateX corresponds to Y movement (up/down tilt) - inverted for natural feel
+            orbRef.current.style.transform = `perspective(1000px) rotateY(${x * 15}deg) rotateX(${-y * 15}deg)`;
+        };
+
+        window.addEventListener('mousemove', handleMouseMove);
+        return () => window.removeEventListener('mousemove', handleMouseMove);
+    }, []);
 
     return (
         <div className="landing">
@@ -61,10 +83,12 @@ const Landing = () => {
 
                     {/* 3D Orb Visualization */}
                     <div className="hero-visual">
-                        <div className="orb-container">
-                            <div className="orb-ring orb-ring-1"></div>
-                            <div className="orb-ring orb-ring-2"></div>
-                            <div className="orb-core"></div>
+                        <div className="orb-float-wrapper">
+                            <div className="orb-container" ref={orbRef}>
+                                <div className="orb-ring orb-ring-1"></div>
+                                <div className="orb-ring orb-ring-2"></div>
+                                <div className="orb-core"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

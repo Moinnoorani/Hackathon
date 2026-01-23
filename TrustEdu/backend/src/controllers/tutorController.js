@@ -2,6 +2,7 @@ const axios = require("axios");
 const OpenAI = require("openai");
 const fs = require('fs');
 const path = require('path');
+const blockchainService = require('../services/blockchainService');
 
 // Load Knowledge Base
 let KNOWLEDGE_BASE = [];
@@ -144,29 +145,41 @@ STRICT PROTOCOL:
   }
 
   // STEP 3: Blockchain Record & Response
-  const blockchain = createBlockchainRecord(studentId);
+  try {
+    const blockchainRecord = await blockchainService.storeHashOnBlockchain(
+      `CHAT_${Date.now()}`,
+      studentId,
+      { studentId, question, answer, timestamp: new Date() }
+    );
+    console.log("🔗 Real Blockchain TX:", blockchainRecord.txHash);
 
-  chatHistory.push({
-    studentId,
-    question,
-    answer,
-    timestamp: new Date(),
-    txHash: blockchain.txHash
-  });
+    chatHistory.push({
+      studentId,
+      question,
+      answer,
+      timestamp: new Date(),
+      txHash: blockchainRecord.txHash
+    });
 
-  res.json({
-    question,
-    answer,
-    type: "ACADEMIC",
-    blockchain
-  });
+    res.json({
+      question,
+      answer,
+      type: "ACADEMIC",
+      blockchain: {
+        txHash: blockchainRecord.txHash,
+        blockNumber: blockchainRecord.blockNumber,
+        timestamp: blockchainRecord.createdAt
+      }
+    });
+  } catch (bcError) {
+    console.error("❌ Blockchain Error:", bcError.message);
+    // Fallback to response without blockchain if it fails (optimization)
+    res.json({
+      question,
+      answer,
+      type: "ACADEMIC",
+      blockchain: { status: "pending/failed", error: "Transaction failed" }
+    });
+  }
 };
 
-function createBlockchainRecord(studentId) {
-  return {
-    recordId: `${studentId}_CHAT_${Date.now()}`,
-    txHash: `0x${Math.random().toString(36).substring(2, 15)}${Math.random().toString(36).substring(2, 15)}`,
-    blockNumber: Math.floor(Math.random() * 1000000),
-    timestamp: new Date()
-  };
-}

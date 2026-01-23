@@ -2,7 +2,7 @@ require("dotenv").config();
 const { ethers } = require("ethers");
 
 // Sepolia provider
-const provider = new ethers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL);
+const provider = new ethers.JsonRpcProvider(process.env.SEPOLIA_RPC_URL || "https://ethereum-sepolia.publicnode.com");
 
 // Wallet signer
 const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);

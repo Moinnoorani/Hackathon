@@ -31,9 +31,7 @@ const BlockchainVerification = ({ blockchain }) => {
     };
 
     const getExplorerUrl = (txHash) => {
-        // For localhost/Hardhat, this would be modified for actual testnet
-        // Example: Polygon Mumbai or Ethereum Sepolia
-        return `https://mumbai.polygonscan.com/tx/${txHash}`;
+        return `https://sepolia.etherscan.io/tx/${txHash}`;
     };
 
     return (

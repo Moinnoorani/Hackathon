@@ -1,47 +1,30 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Link, useNavigate, useLocation } from "react-router-dom";
 import Landing from "./pages/Landing";
 import StudentDashboard from "./pages/StudentDashboard";
 import TutorChat from "./pages/TutorChat";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import AuditPage from "./pages/AuditPage";
+import authService from "./services/authService";
 import { Button } from "./components/ui";
 import "./App.css";
 
-const Navbar = () => {
-  const navigate = useNavigate();
-
-  return (
-    <nav className="navbar">
-      <div className="container navbar-container">
-        <Link to="/" className="navbar-logo">
-          <span className="logo-text">Trust</span>
-          <span className="logo-gradient">Edu</span>
-        </Link>
-
-        <div className="navbar-links">
-          <Link to="/dashboard" className="nav-link">Dashboard</Link>
-          <Link to="/tutor" className="nav-link">AI Tutor</Link>
-        </div>
-
-        <div className="navbar-cta">
-          <Button size="sm" onClick={() => navigate('/dashboard')}>
-            Get Started
-          </Button>
-        </div>
-      </div>
-    </nav>
-  );
-};
+import Navbar from "./components/Navbar";
 
 const App = () => {
   return (
     <Router>
-      <div className="app">
+      <div className="app min-h-screen bg-background text-foreground flex flex-col">
         <Navbar />
-        <main className="main-content">
+        <main className="main-content flex-grow pt-16">
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<StudentDashboard />} />
             <Route path="/tutor" element={<TutorChat />} />
+            <Route path="/audit" element={<AuditPage />} />
           </Routes>
         </main>
       </div>

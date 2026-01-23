@@ -124,18 +124,28 @@
     letter-spacing: 0.05em;
 }
 
-/* 3D Orb Visualization */
+/* 3D Orb Visualization - Advanced Gyroscope */
 .hero-visual {
     display: flex;
     justify-content: center;
     align-items: center;
+    perspective: 1000px;
+    /* Essential for 3D effect */
+}
+
+.orb-float-wrapper {
+    animation: simple-float 6s ease-in-out infinite;
+    transform-style: preserve-3d;
 }
 
 .orb-container {
     position: relative;
     width: 400px;
     height: 400px;
-    animation: float 8s ease-in-out infinite;
+    transform-style: preserve-3d;
+    /* Animation removed to allow JS transform */
+    transition: transform 0.1s ease-out;
+    /* Smooth out mouse movement */
 }
 
 .orb-core {
@@ -143,45 +153,100 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 150px;
-    height: 150px;
-    background: radial-gradient(circle, #F7931A 0%, #EA580C 100%);
+    width: 140px;
+    height: 140px;
+    background: radial-gradient(circle at 30% 30%, #FFD600 0%, #EA580C 60%, #9A3412 100%);
     border-radius: 50%;
     box-shadow:
-        0 0 60px #F7931A,
-        0 0 120px rgba(247, 147, 26, 0.5),
-        inset 0 0 60px rgba(255, 255, 255, 0.2);
-    animation: pulse-glow 3s ease-in-out infinite;
+        0 0 60px rgba(234, 88, 12, 0.6),
+        inset 10px 10px 20px rgba(255, 255, 255, 0.2);
+    animation: core-pulse 4s ease-in-out infinite;
+    z-index: 10;
 }
 
+/* 3D Rings */
 .orb-ring {
     position: absolute;
-    border: 2px solid rgba(247, 147, 26, 0.3);
-    border-radius: 50%;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 2px solid rgba(247, 147, 26, 0.4);
+    transform-style: preserve-3d;
 }
 
 .orb-ring-1 {
-    width: 250px;
-    height: 250px;
-    animation: spin 10s linear infinite;
+    width: 240px;
+    height: 240px;
+    border-color: rgba(247, 147, 26, 0.6);
+    border-width: 4px;
+    animation: rotate-3d-1 8s linear infinite;
+    box-shadow: 0 0 15px rgba(247, 147, 26, 0.3);
 }
 
 .orb-ring-2 {
-    width: 350px;
-    height: 350px;
-    animation: spin 15s linear infinite reverse;
+    width: 340px;
+    height: 340px;
+    border-color: rgba(59, 130, 246, 0.4);
+    /* Blue accent for blockchain */
+    border-width: 2px;
+    animation: rotate-3d-2 12s linear infinite;
 }
 
-@keyframes spin {
-    from {
-        transform: translate(-50%, -50%) rotate(0deg);
+.orb-ring::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: 50%;
+    width: 8px;
+    height: 8px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #fff;
+}
+
+@keyframes simple-float {
+
+    0%,
+    100% {
+        transform: translateY(0);
     }
 
-    to {
-        transform: translate(-50%, -50%) rotate(360deg);
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes core-pulse {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 0 0 60px rgba(234, 88, 12, 0.6);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.05);
+        box-shadow: 0 0 80px rgba(247, 147, 26, 0.8);
+    }
+}
+
+@keyframes rotate-3d-1 {
+    0% {
+        transform: translate(-50%, -50%) rotateX(60deg) rotateY(0deg) rotateZ(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotateX(60deg) rotateY(360deg) rotateZ(0deg);
+    }
+}
+
+@keyframes rotate-3d-2 {
+    0% {
+        transform: translate(-50%, -50%) rotateX(-45deg) rotateY(0deg) rotateZ(0deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotateX(-45deg) rotateY(-360deg) rotateZ(0deg);
     }
 }
 

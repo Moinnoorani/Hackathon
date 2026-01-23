@@ -1,15 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, Input, Button, Badge } from '../components/ui';
 import { TrendingUp, Award, AlertCircle } from 'lucide-react';
 import PredictionResult from '../components/PredictionResult';
 import BlockchainVerification from '../components/BlockchainVerification';
+import AuditTrail from '../components/AuditTrail';
 import { createPrediction } from '../services/api';
+import authService from '../services/authService';
 import './StudentDashboard.css';
 
 const StudentDashboard = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const [form, setForm] = useState({
     studentId: '',
@@ -19,6 +22,15 @@ const StudentDashboard = () => {
     quizScore: '',
     assignmentScore: ''
   });
+
+  useEffect(() => {
+    const user = authService.getCurrentUser();
+    if (user && user.user) {
+      setCurrentUser(user.user);
+      // Auto-fill studentId from username
+      setForm(prev => ({ ...prev, studentId: user.user.username }));
+    }
+  }, []);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -49,15 +61,11 @@ const StudentDashboard = () => {
     }
   };
 
-  const getRiskBadgeVariant = (risk) => {
-    if (risk === 'Low') return 'success';
-    if (risk === 'Medium') return 'warning';
-    return 'danger';
-  };
+  // ... (rest of helper functions)
 
   return (
     <div className="dashboard">
-      {/* Hero Section */}
+      {/* ... (Hero Section same as before) */}
       <section className="dashboard-hero">
         <div className="container">
           <div className="hero-content">
@@ -94,17 +102,18 @@ const StudentDashboard = () => {
                   <form onSubmit={handleSubmit} className="prediction-form">
                     <div className="form-row">
                       <Input
-                        label="Student ID"
+                        label="Username"
                         name="studentId"
-                        placeholder="e.g., STU-2024-001"
                         value={form.studentId}
-                        onChange={handleChange}
-                        required
+                        readOnly
+                        disabled
+                        className="opacity-75 cursor-not-allowed"
                       />
                       <Input
                         label="Semester"
                         name="semester"
                         type="number"
+                        min="1" max="8"
                         placeholder="e.g., 5"
                         value={form.semester}
                         onChange={handleChange}
@@ -118,6 +127,7 @@ const StudentDashboard = () => {
                         label="Overall Marks"
                         name="marks"
                         type="number"
+                        min="0" max="100"
                         placeholder="e.g., 75"
                         value={form.marks}
                         onChange={handleChange}
@@ -128,6 +138,7 @@ const StudentDashboard = () => {
                         label="Attendance %"
                         name="attendance"
                         type="number"
+                        min="0" max="100"
                         placeholder="e.g., 85"
                         value={form.attendance}
                         onChange={handleChange}
@@ -141,6 +152,7 @@ const StudentDashboard = () => {
                         label="Quiz Score"
                         name="quizScore"
                         type="number"
+                        min="0" max="100"
                         placeholder="e.g., 80"
                         value={form.quizScore}
                         onChange={handleChange}
@@ -151,6 +163,7 @@ const StudentDashboard = () => {
                         label="Assignment Score"
                         name="assignmentScore"
                         type="number"
+                        min="0" max="100"
                         placeholder="e.g., 78"
                         value={form.assignmentScore}
                         onChange={handleChange}
@@ -180,6 +193,7 @@ const StudentDashboard = () => {
               </Card>
             </div>
 
+
             {/* Right Column - Results */}
             <div className="dashboard-results-section">
               {result ? (
@@ -196,6 +210,9 @@ const StudentDashboard = () => {
                   </div>
                 </Card>
               )}
+
+              {/* Audit Trail Section */}
+              {currentUser && <AuditTrail studentId={currentUser.username} limit={5} />}
             </div>
           </div>
         </div>
