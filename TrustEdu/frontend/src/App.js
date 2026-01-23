@@ -12,23 +12,27 @@ import "./App.css";
 
 import Navbar from "./components/Navbar";
 
+import { ThemeProvider } from "./context/ThemeContext";
+
 const App = () => {
   return (
-    <Router>
-      <div className="app min-h-screen bg-background text-foreground flex flex-col">
-        <Navbar />
-        <main className="main-content flex-grow pt-16">
-          <Routes>
-            <Route path="/" element={<Landing />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/dashboard" element={<StudentDashboard />} />
-            <Route path="/tutor" element={<TutorChat />} />
-            <Route path="/audit" element={<AuditPage />} />
-          </Routes>
-        </main>
-      </div>
-    </Router>
+    <ThemeProvider>
+      <Router>
+        <div className="app min-h-screen bg-background text-foreground flex flex-col">
+          <Navbar />
+          <main className="main-content flex-grow pt-16">
+            <Routes>
+              <Route path="/" element={<Landing />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/dashboard" element={<StudentDashboard />} />
+              <Route path="/tutor" element={<TutorChat />} />
+              <Route path="/audit" element={<AuditPage />} />
+            </Routes>
+          </main>
+        </div>
+      </Router>
+    </ThemeProvider>
   );
 };
 

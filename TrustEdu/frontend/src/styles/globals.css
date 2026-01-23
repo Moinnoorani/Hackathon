@@ -44,6 +44,18 @@
   --font-mono: 'JetBrains Mono', monospace;
 }
 
+[data-theme='light'] {
+  /* Light Mode Colors */
+  --color-background: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-foreground: #0F172A;
+  --color-muted: #64748B;
+  --color-border: #E2E8F0;
+
+  /* Adjust shadows for light mode */
+  --shadow-card-elevation: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
 /* Base Styles */
 html {
   scroll-behavior: smooth;

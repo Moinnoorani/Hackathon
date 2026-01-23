@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import authService from "../services/authService";
 import { Button } from "./ui";
-import { LogOut, User, GraduationCap } from "lucide-react";
+import { useTheme } from "../context/ThemeContext";
+import { LogOut, User, GraduationCap, Moon, Sun } from "lucide-react";
 import "./Navbar.css";
 
 const Navbar = () => {
@@ -10,6 +11,7 @@ const Navbar = () => {
     const location = useLocation();
     const [currentUser, setCurrentUser] = useState(undefined);
     const [scrolled, setScrolled] = useState(false);
+    const { theme, toggleTheme } = useTheme();
 
     useEffect(() => {
         const user = authService.getCurrentUser();
@@ -60,6 +62,10 @@ const Navbar = () => {
 
             {/* Right Side (Profile / Auth) */}
             <div className="navbar-user">
+                <Button variant="ghost" size="icon" onClick={toggleTheme} className="mr-2 text-muted hover:text-foreground">
+                    {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                </Button>
+
                 {currentUser ? (
                     <>
                         <div className="user-greeting">

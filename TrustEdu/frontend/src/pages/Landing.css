@@ -302,40 +302,125 @@
     padding: 2rem 0;
 }
 
-.timeline-line {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: linear-gradient(to bottom, #EA580C, transparent);
-    transform: translateX(-50%);
-}
-
-.timeline-item {
+/* Process Grid (How It Works) */
+.process-grid {
+    display: flex;
+    align-items: flex-start;
+    /* Align top */
+    justify-content: space-between;
     position: relative;
-    margin-bottom: 3rem;
-    padding-left: calc(50% + 3rem);
+    gap: 1rem;
+    margin-top: 3rem;
 }
 
-.timeline-number {
+.process-step {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    z-index: 2;
+}
+
+.step-card {
+    padding: 1.5rem;
+    height: 100%;
+    min-height: 260px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background: rgba(15, 23, 42, 0.4);
+    /* Darker glass */
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-theme='light'] .step-card {
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.step-number-bg {
     position: absolute;
-    left: 50%;
-    top: 0;
-    transform: translateX(-50%);
-    width: 48px;
-    height: 48px;
-    background: linear-gradient(135deg, #EA580C, #F7931A);
-    border-radius: 50%;
+    top: -20px;
+    left: 10px;
+    font-size: 4rem;
+    font-weight: 800;
+    color: rgba(255, 255, 255, 0.03);
+    z-index: 0;
+    line-height: 1;
+    font-family: var(--font-heading);
+    pointer-events: none;
+}
+
+[data-theme='light'] .step-number-bg {
+    color: rgba(0, 0, 0, 0.03);
+}
+
+.step-icon-wrapper {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-family: var(--font-heading);
-    font-weight: 700;
+    margin-bottom: 1.25rem;
+    background: var(--color-surface);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.step-card:hover .step-icon-wrapper {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.step-title {
     font-size: 1.25rem;
-    color: white;
-    box-shadow: 0 0 20px rgba(247, 147, 26, 0.5);
-    z-index: 2;
+    font-weight: 700;
+    margin-bottom: 0.75rem;
+    color: var(--color-foreground);
+}
+
+.step-description {
+    font-size: 0.9rem;
+    color: var(--color-muted);
+    line-height: 1.5;
+}
+
+.process-connector {
+    display: flex;
+    align-self: center;
+    color: var(--color-border);
+    opacity: 0.5;
+    margin-top: -30px;
+    /* Adjust to align with center of cards roughly */
+}
+
+/* Response for Mobile */
+@media (max-width: 900px) {
+    .process-grid {
+        flex-direction: column;
+        gap: 3rem;
+    }
+
+    .process-connector {
+        transform: rotate(90deg);
+        margin: -1rem 0;
+        align-self: center;
+    }
+
+    .step-card {
+        min-height: auto;
+        flex-direction: row;
+        text-align: left;
+        align-items: flex-start;
+        gap: 1.5rem;
+    }
+
+    .step-icon-wrapper {
+        margin-bottom: 0;
+        flex-shrink: 0;
+    }
 }
 
 .timeline-card {
