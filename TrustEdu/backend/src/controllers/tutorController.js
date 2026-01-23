@@ -1,137 +1,165 @@
 const axios = require("axios");
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+const OpenAI = require("openai");
+const fs = require('fs');
+const path = require('path');
+
+// Load Knowledge Base
+let KNOWLEDGE_BASE = [];
+try {
+  const kbPath = path.join(__dirname, '../data/education_kb.json');
+  if (fs.existsSync(kbPath)) {
+    KNOWLEDGE_BASE = JSON.parse(fs.readFileSync(kbPath, 'utf8'));
+    console.log(`📚 Loaded ${KNOWLEDGE_BASE.length} articles from Knowledge Base`);
+  }
+} catch (err) {
+  console.warn("⚠️ Failed to load Knowledge Base:", err.message);
+}
 
 // In-memory chat storage
 const chatHistory = [];
 
-// Educational topic keywords for filtering
-const EDUCATIONAL_TOPICS = [
-  'math', 'science', 'physics', 'chemistry', 'biology', 'history',
-  'geography', 'english', 'literature', 'programming', 'coding',
-  'computer', 'engineering', 'calculus', 'algebra', 'geometry',
-  'python', 'java', 'javascript', 'ai', 'machine learning', 'ml',
-  'blockchain', 'study', 'learn', 'education', 'school', 'college',
-  'exam', 'test', 'homework', 'assignment', 'grade', 'marks',
-  'attendance', 'formula', 'equation', 'theory', 'concept'
-];
-
 const NON_EDUCATIONAL_TOPICS = [
   'joke', 'movie', 'film', 'song', 'music', 'sports', 'game',
   'weather', 'politics', 'news', 'celebrity', 'entertainment',
-  'restaurant', 'food', 'recipe', 'travel', 'vacation'
+  'restaurant', 'food', 'recipe', 'travel', 'vacation', 'cinema',
+  'actor', 'actress', 'gossip'
 ];
 
-function isEducationalQuestion(question) {
+/**
+ * Retrieve relevant context from local Knowledge Base (RAG)
+ */
+function findRelevantContext(query) {
+  if (!KNOWLEDGE_BASE.length) return null;
+
+  const q = query.toLowerCase();
+  let bestMatch = null;
+  let maxScore = 0;
+
+  for (const entry of KNOWLEDGE_BASE) {
+    let score = 0;
+
+    // Topic exact match
+    if (entry.topic.toLowerCase() === q) score += 50;
+    // Topic partial match
+    if (q.includes(entry.topic.toLowerCase())) score += 20;
+
+    // Keyword match
+    for (const keyword of entry.keywords) {
+      if (q.includes(keyword.toLowerCase())) score += 5;
+    }
+
+    if (score > maxScore) {
+      maxScore = score;
+      bestMatch = entry;
+    }
+  }
+
+  return maxScore > 0 ? bestMatch : null;
+}
+
+function isDefinitelyNonEducational(question) {
   const q = question.toLowerCase();
-
-  // Check for non-educational topics
   for (let bad of NON_EDUCATIONAL_TOPICS) {
-    if (q.includes(bad)) {
-      return false;
-    }
+    if (q.includes(bad)) return true;
   }
-
-  // Check for educational topics
-  for (let topic of EDUCATIONAL_TOPICS) {
-    if (q.includes(topic)) {
-      return true;
-    }
-  }
-
-  // Default: Allow questions that look academic (contain question words)
-  const questionWords = ['what', 'how', 'why', 'when', 'where', 'explain', 'define', 'calculate'];
-  for (let word of questionWords) {
-    if (q.startsWith(word) || q.includes(' ' + word + ' ')) {
-      return true; // Benefit of doubt for question-like queries
-    }
-  }
-
-  return true; // Default to allowing (educational bias)
+  return false;
 }
 
 exports.chatWithTutor = async (req, res) => {
-  try {
-    const { studentId, question } = req.body;
+  const { studentId, question } = req.body;
 
-    if (!studentId || !question) {
-      return res.status(400).json({ error: "Missing studentId or question" });
-    }
-
-    console.log("💬 Tutor chat for student:", studentId, "| Question:", question);
-
-    // STEP 1: Check if educational
-    if (!isEducationalQuestion(question)) {
-      console.log("❌ Non-educational question blocked:", question);
-      return res.json({
-        question,
-        answer: "I am an Educational AI Tutor. I can only help with academic topics like Science, Math, History, Programming, and Study Skills. Please ask an educational question.",
-        type: "NON_EDUCATIONAL",
-        blockchain: createBlockchainRecord(studentId)
-      });
-    }
-
-    let answer = "";
-
-    // STEP 2: Try Gemini API
-    try {
-      const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
-      // Try the model (will throw 404 if not available)
-      const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-
-      const systemPrompt = `You are a strict Educational AI Tutor for TrustEdu.
-
-RULES:
-1. ONLY answer questions related to education, academics, science, math, programming, history, or study skills.
-2. If the question is not educational, politely decline.
-3. Keep answers concise (2-3 sentences max).
-4. Provide factual, accurate information. Do not make up facts.
-
-Student's Question: "${question}"
-
-Your Educational Answer:`;
-
-      const result = await model.generateContent(systemPrompt);
-      const response = await result.response;
-      answer = response.text();
-
-      console.log("✅ Gemini API success!");
-
-    } catch (apiError) {
-      console.error("⚠️ Gemini API Error:", apiError.message);
-
-      // API failed - Provide helpful fallback
-      answer = `This question requires access to our AI service. Please try:
-      
-1. What is [topic]? (e.g., "What is photosynthesis?")
-2. How do I [task]? (e.g., "How do I solve quadratic equations?")
-3. Study tips and academic advice
-
-Note: Our AI service is temporarily unavailable. Please contact support with error: ${apiError.message.substring(0, 50)}`;
-    }
-
-    // STEP 3: Store and return
-    const blockchain = createBlockchainRecord(studentId);
-
-    chatHistory.push({
-      studentId,
-      question,
-      answer,
-      timestamp: new Date(),
-      txHash: blockchain.txHash
-    });
-
-    res.json({
-      question,
-      answer,
-      type: "ACADEMIC",
-      blockchain
-    });
-
-  } catch (err) {
-    console.error("❌ Fatal tutor error:", err.message);
-    res.status(500).json({ error: "Tutor service error: " + err.message });
+  if (!studentId || !question) {
+    return res.status(400).json({ error: "Missing studentId or question" });
   }
+
+  console.log("💬 Tutor chat for student:", studentId, "| Question:", question);
+
+  // STEP 1: Strict Non-Educational Filter (Local)
+  if (isDefinitelyNonEducational(question)) {
+    return res.json({
+      question,
+      answer: "I specialize exclusively in academic subjects. I cannot discuss entertainment or leisure topics. Let's focus on your studies.",
+      type: "NON_EDUCATIONAL",
+      blockchain: createBlockchainRecord(studentId)
+    });
+  }
+
+  let answer = "";
+  const contextEntry = findRelevantContext(question);
+
+  // STEP 2: Connect to OpenRouter with RAG Context
+  try {
+    const openai = new OpenAI({
+      baseURL: "https://openrouter.ai/api/v1",
+      apiKey: process.env.OPENAI_API_KEY,
+      defaultHeaders: {
+        "HTTP-Referer": "http://localhost:3000", // Optional, for OpenRouter rankings
+        "X-Title": "TrustEdu Hackathon App",
+      }
+    });
+
+    const contextText = contextEntry ?
+      `CONFIRMED KNOWLEDGE BASE INFO:\nTopic: ${contextEntry.topic}\nData: ${contextEntry.content}\n` :
+      "No specific local matches found. Use your general academic knowledge.";
+
+    const systemPrompt = `You are an advanced Educational AI Tutor.
+    
+YOUR GOAL: Provide a clear, helpful, and accurate academic answer.
+
+STRICT PROTOCOL:
+1. **Context First**: \n${contextText}\n
+   - If "CONFIRMED KNOWLEDGE BASE INFO" is provided, YOU MUST base your answer on it. It is the source of truth.
+   - Expand on it slightly if needed for clarity.
+
+2. **Education Only**: 
+   - You must detect if the question is educational. 
+   - If the user asks about movies, games, or non-academic gossip, REFUSE politely.
+   - If the question is greeting ("hi"), reply welcoming them to learning.
+
+3. **Format**:
+   - Keep it concise (under 4 sentences).
+   - Use professional tone.
+`;
+
+    const completion = await openai.chat.completions.create({
+      model: "google/gemini-2.0-flash-001", // Fast, often free on OpenRouter
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: question }
+      ],
+    });
+
+    answer = completion.choices[0].message.content;
+    console.log("✅ OpenRouter AI Responded");
+
+  } catch (apiError) {
+    console.error("⚠️ AI Connection Failed:", apiError.message);
+
+    // Fallback if OpenRouter fails
+    if (contextEntry) {
+      answer = `(Offline Backup) Here is what I know about **${contextEntry.topic}**: ${contextEntry.content}`;
+    } else {
+      answer = "I am currently unable to reach my knowledge core. Please try again in a moment.";
+    }
+  }
+
+  // STEP 3: Blockchain Record & Response
+  const blockchain = createBlockchainRecord(studentId);
+
+  chatHistory.push({
+    studentId,
+    question,
+    answer,
+    timestamp: new Date(),
+    txHash: blockchain.txHash
+  });
+
+  res.json({
+    question,
+    answer,
+    type: "ACADEMIC",
+    blockchain
+  });
 };
 
 function createBlockchainRecord(studentId) {

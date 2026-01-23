@@ -23,7 +23,7 @@ exports.createPrediction = async (req, res) => {
       attendance,
       quizScore,
       assignmentScore
-    });
+    }, { timeout: 5000 });
 
     const predictionResult = mlResponse.data;
     console.log("✅ ML prediction received:", predictionResult);
