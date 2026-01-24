@@ -1,25 +1,59 @@
 import pandas as pd
+import numpy as np
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import classification_report
 import joblib
 
-# Dummy dataset
-data = {
-    "marks": [35, 45, 55, 65, 75, 85, 90, 40, 60, 70],
-    "attendance": [50, 60, 65, 70, 80, 90, 95, 55, 75, 85],
-    "quizScore": [30, 40, 50, 60, 70, 80, 85, 35, 65, 75],
-    "assignmentScore": [40, 50, 55, 65, 75, 85, 90, 45, 70, 80],
-    "risk": ["High", "High", "Medium", "Medium", "Low", "Low", "Low", "High", "Medium", "Low"]
-}
+# Generate Synthetic Data (1000 Students)
+np.random.seed(42)
+n_samples = 1000
 
-df = pd.DataFrame(data)
+# Random scores with some correlation
+attendance = np.random.randint(40, 100, n_samples)
+quizScore = np.random.randint(30, 100, n_samples)
+assignmentScore = np.random.randint(40, 100, n_samples)
+
+# Marks are influenced by attendance and effort (plus noise)
+marks = (attendance * 0.3) + (quizScore * 0.4) + (assignmentScore * 0.3) + np.random.randint(-5, 5, n_samples)
+marks = np.clip(marks, 0, 100) # Ensure valid range
+
+# Create DataFrame
+df = pd.DataFrame({
+    "marks": marks,
+    "attendance": attendance,
+    "quizScore": quizScore,
+    "assignmentScore": assignmentScore
+})
+
+# Define Logic for Risk Labels (Ground Truth)
+def determine_risk(row):
+    avg_score = (row['marks'] + row['quizScore'] + row['assignmentScore']) / 3
+    if row['attendance'] < 60 or avg_score < 50:
+        return "High"
+    elif row['attendance'] < 75 or avg_score < 70:
+        return "Medium"
+    else:
+        return "Low"
+
+df['risk'] = df.apply(determine_risk, axis=1)
+
+print("Dataset Generated:")
+print(df['risk'].value_counts())
 
 X = df[["marks", "attendance", "quizScore", "assignmentScore"]]
 y = df["risk"]
 
+# Train Model
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
 model = RandomForestClassifier(n_estimators=100, random_state=42)
-model.fit(X, y)
+model.fit(X_train, y_train)
+
+# Evaluate
+print("\nModel Performance:")
+print(classification_report(y_test, model.predict(X_test)))
 
 joblib.dump(model, "model.pkl")
 
-print("✅ Model trained and saved as model.pkl")
+print("Model trained on 1000 records and saved as model.pkl")
