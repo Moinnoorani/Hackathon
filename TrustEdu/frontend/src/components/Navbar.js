@@ -27,6 +27,11 @@ const Navbar = () => {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
+    // Hide Navbar on Auth Pages
+    if (["/login", "/register"].includes(location.pathname)) {
+        return null;
+    }
+
     const handleLogout = () => {
         authService.logout();
         setCurrentUser(undefined);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, Badge } from '../components/ui';
-import { Shield, Brain, Link as LinkIcon, TrendingUp, Lock, Zap } from 'lucide-react';
+import { Shield, Brain, Link as LinkIcon, TrendingUp, Lock, Zap, ArrowRight } from 'lucide-react';
 import './Landing.css';
 
 const Landing = () => {
@@ -142,76 +142,97 @@ const Landing = () => {
                         </p>
                     </div>
 
-                    <div className="timeline">
-                        <div className="timeline-line"></div>
-
-                        <div className="timeline-item">
-                            <div className="timeline-number">1</div>
-                            <Card glass className="timeline-card card-corners">
-                                <div className="icon-container icon-ai">
-                                    <Brain size={32} />
+                    <div className="tech-grid-2x2">
+                        {/* Card 1: Explainable AI */}
+                        <div className="tech-card hover-glow">
+                            <span className="step-number-corner">01</span>
+                            <div className="tech-card-header">
+                                <div className="tech-icon-wrapper icon-ai-glow">
+                                    <Brain size={24} />
                                 </div>
-                                <Card.Title>Explainable AI Prediction</Card.Title>
-                                <Card.Description>
-                                    Advanced ML model analyzes student performance with SHAP-based explainability.
-                                    See exactly which factors influence predictions - no black boxes.
-                                </Card.Description>
-                                <Badge variant="ai" className="mt-3">
-                                    <Brain size={12} />
-                                    AI Powered
-                                </Badge>
-                            </Card>
+                                <Badge variant="ai" className="tech-badge-corner">AI POWERED</Badge>
+                            </div>
+
+                            <h3 className="tech-title">AI Transparency</h3>
+                            <p className="tech-description">
+                                No more "black boxes." See exactly why a grade was predicted—whether it's marks, attendance, or quizzes.
+                            </p>
+
+                            <Button variant="outline" className="w-full mt-auto group">
+                                View Analysis <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                            </Button>
+
+                            <div className="card-corner-tl"></div>
+                            <div className="card-corner-br"></div>
                         </div>
 
-                        <div className="timeline-item">
-                            <div className="timeline-number">2</div>
-                            <Card glass className="timeline-card card-corners">
-                                <div className="icon-container icon-warning">
-                                    <Shield size={32} />
+                        {/* Card 2: Bias Detection */}
+                        <div className="tech-card hover-glow">
+                            <span className="step-number-corner">02</span>
+                            <div className="tech-card-header">
+                                <div className="tech-icon-wrapper icon-warning-glow">
+                                    <Shield size={24} />
                                 </div>
-                                <Card.Title>Bias Detection</Card.Title>
-                                <Card.Description>
-                                    Real-time bias monitoring checks for demographic fairness and equal opportunity.
-                                    Automated alerts ensure ethical AI at all times.
-                                </Card.Description>
-                                <Badge variant="warning" pulse>
-                                    Live Monitoring
-                                </Badge>
-                            </Card>
+                                <Badge variant="warning" className="tech-badge-corner">LIVE MONITORING</Badge>
+                            </div>
+
+                            <h3 className="tech-title">Bias Check</h3>
+                            <p className="tech-description">
+                                Our system actively scans for fairness. We ensure every student gets an equal opportunity, regardless of background.
+                            </p>
+
+                            <Button variant="outline" className="w-full mt-auto group">
+                                Check Status <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                            </Button>
+
+                            <div className="card-corner-tl"></div>
+                            <div className="card-corner-br"></div>
                         </div>
 
-                        <div className="timeline-item">
-                            <div className="timeline-number">3</div>
-                            <Card glass className="timeline-card card-corners">
-                                <div className="icon-container icon-blockchain">
-                                    <LinkIcon size={32} />
+                        {/* Card 3: Blockchain Verification */}
+                        <div className="tech-card hover-glow">
+                            <span className="step-number-corner">03</span>
+                            <div className="tech-card-header">
+                                <div className="tech-icon-wrapper icon-blockchain-glow">
+                                    <LinkIcon size={24} />
                                 </div>
-                                <Card.Title>Blockchain Verification</Card.Title>
-                                <Card.Description>
-                                    Every prediction and AI interaction is hashed and stored on-chain.
-                                    Immutable proof creates permanent accountability.
-                                </Card.Description>
-                                <Badge variant="blockchain" pulse>
-                                    On-Chain Verified
-                                </Badge>
-                            </Card>
+                                <Badge variant="blockchain" className="tech-badge-corner">VERIFIED</Badge>
+                            </div>
+
+                            <h3 className="tech-title">Permanent Record</h3>
+                            <p className="tech-description">
+                                Every prediction is secured on the blockchain. This creates an unchangeable history that builds absolute trust.
+                            </p>
+
+                            <Button variant="outline" className="w-full mt-auto group">
+                                Verify Logic <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                            </Button>
+
+                            <div className="card-corner-tl"></div>
+                            <div className="card-corner-br"></div>
                         </div>
 
-                        <div className="timeline-item">
-                            <div className="timeline-number">4</div>
-                            <Card glass className="timeline-card card-corners">
-                                <div className="icon-container icon-success">
-                                    <TrendingUp size={32} />
+                        {/* Card 4: Transparent Results */}
+                        <div className="tech-card hover-glow">
+                            <span className="step-number-corner">04</span>
+                            <div className="tech-card-header">
+                                <div className="tech-icon-wrapper icon-success-glow">
+                                    <TrendingUp size={24} />
                                 </div>
-                                <Card.Title>Transparent Results</Card.Title>
-                                <Card.Description>
-                                    Students receive detailed performance insights with blockchain proof,
-                                    AI explanations, and actionable recommendations.
-                                </Card.Description>
-                                <Badge variant="success">
-                                    100% Transparent
-                                </Badge>
-                            </Card>
+                                <Badge variant="success" className="tech-badge-corner">TRANSPARENT</Badge>
+                            </div>
+
+                            <h3 className="tech-title">Student Insights</h3>
+                            <p className="tech-description">
+                                Get clear, actionable feedback on how to improve. We give you the data you need to succeed.
+                            </p>
+
+                            <Button variant="outline" className="w-full mt-auto group">
+                                See Report <ArrowRight size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                            </Button>
+
+                            <div className="card-corner-tl"></div>
+                            <div className="card-corner-br"></div>
                         </div>
                     </div>
                 </div>

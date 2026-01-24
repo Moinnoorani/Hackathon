@@ -24,7 +24,8 @@
 .input {
     /* Base Styles */
     width: 100%;
-    background: rgba(0, 0, 0, 0.5);
+    background: transparent;
+    /* Dark Mode Default */
     border: none;
     border-bottom: 2px solid rgba(255, 255, 255, 0.2);
     color: var(--color-foreground);
@@ -36,8 +37,19 @@
     outline: none;
 }
 
+[data-theme='light'] .input {
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-bottom: 2px solid var(--color-border);
+    color: var(--color-foreground);
+}
+
 .input::placeholder {
     color: rgba(255, 255, 255, 0.3);
+}
+
+[data-theme='light'] .input::placeholder {
+    color: var(--color-muted);
 }
 
 /* Focus State */
@@ -45,6 +57,11 @@
     border-bottom-color: var(--color-primary);
     box-shadow: 0 10px 20px -10px rgba(247, 147, 26, 0.3);
     background: rgba(0, 0, 0, 0.7);
+}
+
+[data-theme='light'] .input:focus {
+    background: #FFFFFF;
+    box-shadow: 0 4px 12px -2px rgba(247, 147, 26, 0.2);
 }
 
 /* Hover State */
@@ -113,8 +130,116 @@
     border-color: var(--color-primary);
 }
 
-.input-rounded {
-    border-radius: 9999px;
-    padding-left: 1.5rem;
-    padding-right: 1.5rem;
+
+/* Input Wrapper for Icons */
+.input-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-muted);
+    pointer-events: none;
+    transition: color 0.2s;
+    z-index: 1;
+}
+
+.input-icon-left {
+    left: 1rem;
+}
+
+.input-icon-right {
+    right: 1rem;
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.input:focus~.input-icon {
+    color: var(--color-primary);
+}
+
+/* Padding adjustments for icons */
+.input-has-left-icon {
+    padding-left: 2.75rem;
+}
+
+.input-has-right-icon {
+    padding-right: 2.75rem;
+}
+
+/* Floating Label Variant */
+.input-floating-wrapper {
+    position: relative;
+    padding-top: 1.2rem;
+    /* Increased to give room for label */
+}
+
+.input-floating-label {
+    position: absolute;
+    left: 0;
+    /* Default */
+    top: 60%;
+    /* Sits lower initially */
+    transform: translateY(-50%);
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    background: transparent;
+    padding: 0 0.5rem;
+    transition: all 0.2s ease-out;
+    pointer-events: none;
+    transform-origin: left top;
+}
+
+.input-floating:focus+.input-floating-label,
+.input-floating:not(:placeholder-shown)+.input-floating-label {
+    top: 5px;
+    /* Fixed position from top */
+    left: 0;
+    transform: scale(0.85);
+    /* No translateY, just scale */
+    color: var(--color-primary);
+    font-weight: 500;
+}
+
+.input-floating:focus {
+    border-color: var(--color-primary);
+}
+
+.input-floating.input-has-left-icon+.input-floating-label {
+    left: 2.5rem;
+}
+
+.input-floating:focus.input-has-left-icon+.input-floating-label,
+.input-floating:not(:placeholder-shown).input-has-left-icon+.input-floating-label {
+    left: 0.5rem;
+}
+
+/* ReadOnly State */
+.input:read-only {
+    background: transparent !important;
+    opacity: 0.8;
+    cursor: default;
+    border-bottom-style: dashed;
+}
+
+/* Vertical center alignment fixes */
+.input-wrapper,
+.input-floating-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.input-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    top: 0;
+    transform: none;
+    /* Flexbox handles centering */
 }

@@ -47,6 +47,18 @@
     min-height: 52px;
 }
 
+/* Icon Button (Square/Circle) */
+.btn-icon {
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    min-height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 /* Full Width */
 .btn-full {
     width: 100%;
@@ -71,14 +83,23 @@
 /* Outline Variant */
 .btn-outline {
     background: transparent;
-    color: white;
+    color: var(--color-foreground);
+    /* Adapts to theme */
     border: 2px solid rgba(255, 255, 255, 0.2);
 }
 
+[data-theme='light'] .btn-outline {
+    border-color: var(--color-border);
+}
+
 .btn-outline:hover:not(:disabled) {
-    border-color: white;
+    border-color: var(--color-foreground);
     background: rgba(255, 255, 255, 0.1);
     transform: translateY(-2px);
+}
+
+[data-theme='light'] .btn-outline:hover:not(:disabled) {
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .btn-outline:active:not(:disabled) {
@@ -88,7 +109,8 @@
 /* Ghost Variant */
 .btn-ghost {
     background: transparent;
-    color: white;
+    color: var(--color-foreground);
+    /* Adapts to theme */
 }
 
 .btn-ghost:hover:not(:disabled) {

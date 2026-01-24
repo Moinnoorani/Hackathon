@@ -15,6 +15,19 @@ const userSchema = new mongoose.Schema({
         minlength: 3,
         maxlength: 30
     },
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        lowercase: true
+    },
+    walletAddress: {
+        type: String,
+        unique: true,
+        sparse: true, // Allow nulls/duplicates for non-wallet users if needed (though unique implies one wallet per user)
+        lowercase: true
+    },
     password: {
         type: String,
         required: true,

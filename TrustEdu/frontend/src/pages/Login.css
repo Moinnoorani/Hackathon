@@ -1,0 +1,313 @@
+/* Login Page Styles */
+
+.login-container {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    background-color: var(--color-background);
+    overflow: hidden;
+}
+
+/* LEFT SIDE: Brand & Art */
+.login-brand-section {
+    display: none;
+    width: 50%;
+    background-color: var(--color-surface);
+    position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+    .login-brand-section {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 3rem;
+    }
+}
+
+/* Abstract Art Background */
+.brand-art-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+}
+
+.brand-pattern {
+    position: absolute;
+    inset: 0;
+    background-size: 50px 50px;
+    background-image:
+        linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    opacity: 0.5;
+}
+
+.brand-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(247, 147, 26, 0.05) 0%, transparent 100%);
+}
+
+.brand-glow {
+    position: absolute;
+    bottom: -10rem;
+    left: -10rem;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(247, 147, 26, 0.15) 0%, transparent 70%);
+    border-radius: 50%;
+    filter: blur(80px);
+}
+
+/* Brand Content */
+.brand-content {
+    position: relative;
+    z-index: 10;
+    max-width: 500px;
+}
+
+.brand-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    margin-bottom: 2rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--color-muted);
+    letter-spacing: 0.05em;
+}
+
+.brand-title {
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    color: var(--color-foreground);
+}
+
+.brand-description {
+    font-size: 1.125rem;
+    color: var(--color-muted);
+    line-height: 1.6;
+    margin-bottom: 3rem;
+    max-width: 90%;
+}
+
+.social-proof {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-avatars {
+    display: flex;
+}
+
+.avatar-circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--color-surface);
+    border: 2px solid var(--color-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    color: var(--color-muted);
+    margin-left: -12px;
+}
+
+.avatar-circle:first-child {
+    margin-left: 0;
+}
+
+.proof-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.proof-count {
+    font-weight: 700;
+    color: var(--color-foreground);
+}
+
+.proof-label {
+    font-size: 0.8rem;
+    color: var(--color-muted);
+}
+
+/* RIGHT SIDE: Form */
+.login-form-section {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+}
+
+@media (min-width: 1024px) {
+    .login-form-section {
+        width: 50%;
+    }
+}
+
+.login-card {
+    width: 100%;
+    max-width: 450px;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.login-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    color: var(--color-foreground);
+}
+
+.login-subtitle {
+    color: var(--color-muted);
+}
+
+/* Form Elements */
+.login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.input-group-password {
+    position: relative;
+}
+
+.forgot-password-link {
+    display: block;
+    text-align: right;
+    font-size: 0.8rem;
+    color: var(--color-primary);
+    text-decoration: none;
+    margin-top: 0.5rem;
+    transition: color 0.2s;
+}
+
+.forgot-password-link:hover {
+    color: var(--color-primary-light);
+}
+
+.login-btn-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+/* Divider */
+.login-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2rem 0;
+    color: var(--color-muted);
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+}
+
+.divider-line {
+    flex: 1;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Social Login */
+.social-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.social-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-muted);
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.social-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-foreground);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Footer Links */
+.login-footer {
+    margin-top: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: var(--color-muted);
+}
+
+.register-link {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 0.25rem;
+}
+
+.register-link:hover {
+    text-decoration: underline;
+}
+
+.security-badges {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    font-size: 0.75rem;
+    color: rgba(148, 163, 184, 0.5);
+    /* Ultra muted */
+}
+
+.badge-item {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+}
+
+/* Error Alert */
+.login-error {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #FCA5A5;
+    /* Light Red */
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}

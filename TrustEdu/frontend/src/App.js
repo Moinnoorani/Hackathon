@@ -5,6 +5,7 @@ import StudentDashboard from "./pages/StudentDashboard";
 import TutorChat from "./pages/TutorChat";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
 import AuditPage from "./pages/AuditPage";
 import authService from "./services/authService";
 import { Button } from "./components/ui";
@@ -25,6 +26,7 @@ const App = () => {
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/dashboard" element={<StudentDashboard />} />
               <Route path="/tutor" element={<TutorChat />} />
               <Route path="/audit" element={<AuditPage />} />

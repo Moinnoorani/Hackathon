@@ -12,4 +12,14 @@ router.post('/register', authController.register);
 // @access  Public
 router.post('/login', authController.login);
 
+// @route   POST api/auth/wallet-login
+// @desc    Authenticate user via Wallet Signature
+// @access  Public
+router.post('/wallet-login', authController.walletLogin);
+
+// @route   POST api/auth/forgot-password
+// @desc    Send password reset email
+// @access  Public
+router.post('/forgot-password', authController.forgotPassword);
+
 module.exports = router;

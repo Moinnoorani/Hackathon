@@ -27,7 +27,8 @@
 }
 
 .timeline-content {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-surface);
+    /* Adapts to theme */
     border: 1px solid var(--color-border);
     border-radius: 0.75rem;
     padding: 1rem;
@@ -35,9 +36,13 @@
 }
 
 .timeline-content:hover {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-surface);
     border-color: var(--color-primary);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme='light'] .timeline-content:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
 }
 
 .timeline-header {
@@ -55,7 +60,8 @@
 .timeline-title {
     font-size: 1rem;
     font-weight: 600;
-    color: white;
+    color: var(--color-foreground);
+    /* Adapts to theme */
     margin-bottom: 0.5rem;
 }
 

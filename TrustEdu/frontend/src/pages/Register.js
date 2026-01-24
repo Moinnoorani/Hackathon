@@ -6,6 +6,7 @@ import { Button, Input, Card } from "../components/ui";
 const Register = () => {
     const [name, setName] = useState("");
     const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Register = () => {
         }
 
         try {
-            await authService.register(name, username, password);
+            await authService.register(name, username, email, password);
             // After registration, redirect to dashboard
             navigate("/dashboard");
             window.location.reload(); // To update navbar state
@@ -68,6 +69,18 @@ const Register = () => {
                             placeholder="Choose a username"
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
+                            required
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium text-muted mb-2">
+                            Email Address
+                        </label>
+                        <Input
+                            type="email"
+                            placeholder="student@university.edu"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
                             required
                         />
                     </div>

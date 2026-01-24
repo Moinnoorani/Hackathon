@@ -1,25 +1,35 @@
 /* Navbar Container */
 .navbar-container {
     position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
+    top: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 95%;
+    max-width: 1400px;
     z-index: 1000;
-    height: 70px;
+    height: 60px;
     padding: 0 2rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    transition: all 0.3s ease;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 16px;
+    border: 1px solid transparent;
 }
 
 /* Glassmorphism */
 .navbar-glass {
     background: rgba(3, 3, 4, 0.7);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+[data-theme='light'] .navbar-glass {
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
 }
 
 /* Logo Section */
@@ -32,7 +42,8 @@
     font-size: 1.5rem;
     font-weight: 700;
     letter-spacing: -0.02em;
-    color: white;
+    color: var(--color-foreground);
+    /* Adapts to theme */
 }
 
 .logo-icon {
@@ -48,6 +59,9 @@
 
 /* Navigation Links */
 .navbar-links {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     display: flex;
     gap: 2.5rem;
     align-items: center;
@@ -66,8 +80,15 @@
 
 .nav-item:hover,
 .nav-item.active {
-    color: white;
+    color: var(--color-foreground);
+    /* Adapts to theme */
     text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+[data-theme='light'] .nav-item:hover,
+[data-theme='light'] .nav-item.active {
+    text-shadow: none;
+    color: var(--color-primary);
 }
 
 .nav-item::after {
@@ -117,7 +138,8 @@
 
 .btn-login {
     text-decoration: none;
-    color: white;
+    color: var(--color-foreground);
+    /* Adapts to theme */
     font-weight: 600;
     font-size: 0.9rem;
     transition: color 0.2s;
